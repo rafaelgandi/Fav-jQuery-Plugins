@@ -1,0 +1,11 @@
+if (!window.utf8_decode) {	
+	// utf8_decode,utf8_encode,base64_encode,base64_decode functions... 
+	function utf8_decode(a){var b=[],c=0,d=0,e=0,f=0,g=0;a+="";while(c<a.length)e=a.charCodeAt(c),e<128?(b[d++]=String.fromCharCode(e),++c):e>191&&e<224?(f=a.charCodeAt(c+1),b[d++]=String.fromCharCode((e&31)<<6|f&63),c+=2):(f=a.charCodeAt(c+1),g=a.charCodeAt(c+2),b[d++]=String.fromCharCode((e&15)<<12|(f&63)<<6|g&63),c+=3);return b.join("")}
+	function utf8_encode(a){var b=a+"",c="",d,e,f=0;d=e=0,f=b.length;for(var g=0;g<f;g++){var h=b.charCodeAt(g),i=null;h<128?++e:h>127&&h<2048?i=String.fromCharCode(h>>6|192)+String.fromCharCode(h&63|128):i=String.fromCharCode(h>>12|224)+String.fromCharCode(h>>6&63|128)+String.fromCharCode(h&63|128),i!==null&&(e>d&&(c+=b.slice(d,e)),c+=i,d=e=g+1)}e>d&&(c+=b.slice(d,f));return c}
+	function base64_encode(a){var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",c,d,e,f,g,h,i,j,k=0,l=0,m="",n=[];if(!a)return a;a=this.utf8_encode(a+"");do c=a.charCodeAt(k++),d=a.charCodeAt(k++),e=a.charCodeAt(k++),j=c<<16|d<<8|e,f=j>>18&63,g=j>>12&63,h=j>>6&63,i=j&63,n[l++]=b.charAt(f)+b.charAt(g)+b.charAt(h)+b.charAt(i);while(k<a.length);m=n.join("");switch(a.length%3){case 1:m=m.slice(0,-2)+"==";break;case 2:m=m.slice(0,-1)+"="}return m}
+	function base64_decode(a){var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",c,d,e,f,g,h,i,j,k=0,l=0,m="",n=[];if(!a)return a;a+="";do f=b.indexOf(a.charAt(k++)),g=b.indexOf(a.charAt(k++)),h=b.indexOf(a.charAt(k++)),i=b.indexOf(a.charAt(k++)),j=f<<18|g<<12|h<<6|i,c=j>>16&255,d=j>>8&255,e=j&255,h==64?n[l++]=String.fromCharCode(c):i==64?n[l++]=String.fromCharCode(c,d):n[l++]=String.fromCharCode(c,d,e);while(k<a.length);m=n.join("");return m=this.utf8_decode(m)}
+
+	// strip_tags //
+	function strip_tags(a,b){b=(((b||"")+"").toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join("");var c=/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,d=/<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;return a.replace(d,"").replace(c,function(a,c){return b.indexOf("<"+c.toLowerCase()+">")>-1?a:""})}
+
+}
